@@ -1,18 +1,19 @@
-# Final-Project
-DS_Final_project
+# DS_Final_project
+!
 
-
-Customer Churm prediction - Image Pre-Processing - NLP Text Pre-processing - Recommendation system-
-The repo Consists of 4 parts -
-Customer Churm Prediction - E-commerce Website Customer Churn Rate
-Image Pre-processing -I used Pillow as my primary library for Image processing
-NLP Text Pre-processing - It consists of 10 Pre-processing steps for the NLP model
-Recommendation System - I Build a recommendation system using the Spotify dataset
+## Customer Churm prediction - Image Pre-Processing - NLP Text Pre-processing - Recommendation system-
+### The repo Consists of 4 parts - 
+  * Customer Churm Prediction - E-commerce Website Customer Churn Rate
+  * Image Pre-processing -I used Pillow as my primary library for Image processing
+  * NLP Text Pre-processing - It consists of 10 Pre-processing steps for the NLP model
+  * Recommendation System - I Build a recommendation system using the Spotify dataset
+---
 Problem statement Customer Churm Prediction :
+  * We do have an E-commerce dataset, we need to identify or predict who are all coming as visitors and converted as our customers. Using the given data, there is a column called “has_converted” as the target variable. Classify to find whether the user will convert as a customer or not.
 
-We do have an E-commerce dataset, we need to identify or predict who are all coming as visitors and converted as our customers. Using the given data, there is a column called “has_converted” as the target variable. Classify to find whether the user will convert as a customer or not.
-STEP - 1 Import Necessary package
-
+STEP - 1
+Import Necessary package 
+```
 import pandas as pd
 from pycaret.classification import *
 import plotly_express as px
@@ -26,8 +27,9 @@ import pickle
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score,precision_score,recall_score,f1_score,confusion_matrix,classification_report
 from sklearn.ensemble import GradientBoostingClassifier
-Import Dataset and Clean the data -
-
+```
+Import Dataset and Clean the data - 
+```
 #Importing dataset
 df=pd.read_csv("Dataset.csv")v
 #No of unique Obversation in each columns
@@ -35,9 +37,11 @@ df.nunique()
 #Finding Null values
 df.isnull().sum().sort_values(ascending=False)
 #Finding Duplicate values
-df.drop_duplicates(inplace=True))
+df.drop_duplicates(inplace=True)
 #Find Info
 df1.info()
+```
+```
 Int64Index: 9207 entries, 0 to 99934
 Data columns (total 23 columns):
  #   Column                  Non-Null Count  Dtype  
@@ -47,10 +51,12 @@ Data columns (total 23 columns):
  2   totals_newVisits        9207 non-null   int64  
  3   historic_session        9207 non-null   int64 
  ...
-EDA Process
-
-Plot the feature and find the distribution of the data Building Model :
-I use random forest to find the feature importance of the dataset
+```
+ EDA Process 
+   * Plot the feature and find the distribution of the data
+Building Model :
+  * I use random forest to find the feature importance of the dataset
+```
 from sklearn.ensemble import RandomForestClassifier
 
 x=df1.drop("has_converted",axis=1) # DROPPED THE TARGET VARIABLE TEST DATASET
@@ -65,8 +71,9 @@ rf.fit(x,y)
 4 num_interactions	       0.042958
 5 avg_session_time_page	   0.039708
 6 historic_session_page    0.039371
+```
 Cross-valuation to find the optimal algorithm
-
+```
 #CROSS VALIDATION OF 3 ALGORITHM
 gat=GradientBoostingClassifier()
 rf=RandomForestClassifier()
@@ -85,8 +92,9 @@ for i in (gat,rf,lg):
 1	RandomForestClassifier	      0.936375	0.925073	0.921258
 2	LogisticRegression	          0.785846	0.853569	0.582680
 
+```
 Based on the result I selected the Gradient Boosting as the final algorithm
-
+```
 #GradientBoostingClassifier 
 gat=GradientBoostingClassifier()
 gat.fit(X_train,y_train)
@@ -105,21 +113,27 @@ ig.set_title("Confusion Metric")
 ig.set_ylabel("Real Value")
 ig.set_xlabel("Prediction")
 plt.show()
+```
 Once I make it final I pickle the algorithm
-
+```
 import pickle
 with open("modelgrad.pkl","wb") as f:
     pickle.dump(gat,f)
-Final - step once pickle made to run in streamlit application
-Step - 2 - Image Pre-processing Importing necessary packages
-
+```
+Final - step once pickle made to run in streamlit application 
+---
+Step - 2 - Image Pre-processing
+Importing necessary packages 
+```
 import easyocr
 import pandas as pd
 import numpy as np 
 import matplotlib.pyplot as plt  
 from PIL import Image,ImageEnhance,ImageFilter,ImageChops,ImageColor,ImageOps
-Image prep-processing using pillow library
+```
+Image prep-processing using pillow library 
 
+```
 car=Image.open("D:\DTM9\Final Project\\01.jpg")
 print("Format of the Image : ",car.format,"Size of the Image :",car.size,"Mode of the Image :",car.mode)
 #croping
@@ -149,8 +163,10 @@ eq=ImageOps.solarize(car)
 #Image Enhancer 
 en=ImageEnhance.Brightness(car)
 en1=en.enhance(1.0)
-Step - 3 Text NLP pre-processing Import necessary package
-
+```
+Step - 3 Text NLP pre-processing 
+Import necessary package 
+```
 import nltk
 from nltk import word_tokenize,WordNetLemmatizer,pos_tag,PorterStemmer
 from nltk.corpus import stopwords
@@ -163,8 +179,9 @@ from collections import Counter
 import spacy
 from nltk.sentiment import SentimentIntensityAnalyzer
 import seaborn as sns
-Steps using NLPTK for pre-processing
-
+```
+Steps using NLPTK  for pre-processing 
+```
 #NLTK PRE_Processing step
 # remove punctuation 
 re_pun=text.translate(str.maketrans("","",string.punctuation))
@@ -196,8 +213,10 @@ check=str(TextBlob(text).correct())
 
 #part of speech
 part=pos_tag(token)
-Step 4 - Building The Recommendation system Import package
-
+```
+Step 4 - Building The Recommendation system
+Import package 
+```
 #importing the important package for the model
 
 import pandas as pd
@@ -209,8 +228,9 @@ import sklearn
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import pickle
+```
 Import Dataset and clean the data -
-
+```
 #Importing dataset
 df=pd.read_csv("Dataset.csv")v
 #No of unique Obversation in each columns
@@ -221,8 +241,9 @@ df.isnull().sum().sort_values(ascending=False)
 df.drop_duplicates(inplace=True))
 #Find Info
 df1.info()
+```
 View the data info
-
+```
 RangeIndex: 57650 entries, 0 to 57649
 Data columns (total 4 columns):
  #   Column  Non-Null Count  Dtype 
@@ -232,8 +253,9 @@ Data columns (total 4 columns):
  2   link    57650 non-null  object
  3   text    57650 non-null  object
 dtypes: object(4)
-Word tokenization as it is a content filtering
-
+```
+Word tokenization as it is a content filtering 
+```
 stem=PorterStemmer()
 
 def token(text):
@@ -243,12 +265,14 @@ def token(text):
 
 # use lambda funcation to apply this funcation in all the text dataset
 spotiy['text']=spotiy['text'].apply(lambda x: token(x))
-Once made the tokenizatin import vector to make it vectorization
-
+```
+Once made the tokenizatin import  vector to make it vectorization 
+```
 vector=TfidfVectorizer(analyzer="word",stop_words="english")
 t2n=vector.fit_transform(spotiy['text'])
-Now build the recommendation system function
-
+```
+Now build the recommendation system function 
+```
 def recommander(song_name):
     ids=spotiy[spotiy['song']==song_name].index[0]
     dis=sorted(list(enumerate(songsim[ids])),reverse=True,key=lambda x:x[1])  
@@ -260,8 +284,10 @@ def recommander(song_name):
         song.append(s)
         art.append(spotiy.iloc[i[0]].artist)
     return song,art
-Let's see the output -
+```
+Let's see the output - 
 
+```
 recommender("Dragontown")
 'Come Let Go',
 'Chi',
@@ -269,6 +295,11 @@ recommender("Dragontown")
 'I Like It Like That',
 'It Comes Back To You'],
 'Xavier Rudd', 'Korn', 'Elton John', 'Kenny Loggins', 'Imagine Dragons'
-Final step-
+```
+Final step- 
 
-Build the Streamlit application for deployment of the project
+* Build the Streamlit application for deployment of the project
+
+
+  
+
